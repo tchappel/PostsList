@@ -1,0 +1,2 @@
+# PostsList
+exercise using redux
