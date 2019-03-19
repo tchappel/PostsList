@@ -1,21 +1,27 @@
 import React from 'react'
-import {fetchPosts} from "../../redux/actions"
+import { fetchPostsAndUsers } from "../../redux/actions"
 import {connect} from 'react-redux'
 import {Card, Avatar} from 'antd'
+import UserHeader from '../UserHeader'
+import {PostTitle, PostBody} from './styled'
 
 class PostCardsList extends React.PureComponent {
 
     renderList = () => {
-        return this.props.posts.map(it => (
+        return this.props.posts.map(post => (
             <Card
                 style={{width: 600, margin: '15px auto'}}
-                key={it.id}
+                key={post.id}
             >
                 <Card.Meta
                     avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                    title={it.title}
-                    description={it.body}
+                    title={<PostTitle>{post.title}</PostTitle>}
+                    description={<PostBody>{post.body}</PostBody>}
                 />
+                {
+                    this.props.users.find(user => user.id === post.userId) &&
+                    <UserHeader user={this.props.users.find(user => user.id === post.userId)}/>
+                }
             </Card>
         ))
     }
@@ -26,13 +32,14 @@ class PostCardsList extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.props.fetchPosts()
+        this.props.fetchPostsAndUsers()
     }
+
 }
 
 const mapStateToProps = (state) => {
     return state
 }
 
-export default connect(mapStateToProps, {fetchPosts})(PostCardsList)
+export default connect(mapStateToProps, {fetchPostsAndUsers})(PostCardsList)
 
